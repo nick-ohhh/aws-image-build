@@ -1,26 +1,29 @@
 {
     "variables": {
         "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`",
-        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}"
+        "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+        "region": "us-west-2"
     },
     "builders": [
         {
             "type": "amazon-ec2",
             "access_key": "{{user `aws_access_key`}}",
             "secret_key": "{{user `aws_secret_key`}}",
-            "region": "us-west-2",
-            "source_ami_filter": {
-                "filters": {
-                    "virtualization-type": "hvm",
-                    "name": "ubuntu/images/",
-                    "root-device-type": "ec2"
-                },
-                "owners": ["855184334943"],
-                "most_recent": true
-            },
+            "region": "{{user `region`}}",
+            "source_ami": "ami-08692d171e3cf02d6",
             "instance_type": "t2.micro",
             "ssh_username": "ubuntu",
-            "ami_name": "ubuntu-bionic {{timestamp}}"
+            "ssh_keypair_name": "terraform-key",
+            "ssh_private_key_file": "~/.ssh/terraform-key.pem",
+            "ami_name": "packer-practice {{timestamp}}",
+            "security_group_id": "sg-0844b18b3f3837acf",
+            "iam_instance_profile": "bucket_profile"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "instance_setup.sh"
         }
     ]
 }
