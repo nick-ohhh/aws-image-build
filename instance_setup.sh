@@ -3,17 +3,22 @@
 sudo apt-get -y update
 sudo apt-get -y install curl
 sudo apt-get -y install wget
+sudo apt-get -y install ruby
+sudo apt -y install awscli
 
 #managed by puppet now
 # sudo apt-get -y install nginx
 # sudo ufw allow 'Nginx HTTP'
 # sudo service nginx start
 
-sudo apt -y install awscli
-sudo apt-get -y install puppet-agent
+wget https://apt.puppetlabs.com/puppet6-release-xenial.deb
+sudo dpkg -i puppet6-release-xenial.deb
+sudo apt-get update
+sudo apt-get install puppet-agent
+sudo apt-get update
 sudo /opt/puppetlabs/bin/puppet resource service puppet ensure=running enable=true
-wget https://raw.githubusercontent.com/nokeefe/aws-image-build/master/puppet/instance_setup.pp
-sudp /opt/puppetlabs/bin/puppet apply image_setup.pp
+wget https://raw.githubusercontent.com/nokeefe/aws-image-build/master/puppet/image_setup.pp
+sudo /opt/puppetlabs/bin/puppet apply image_setup.pp
 
 #add bucket logo to nginx homepage
 cd /var/www/html/

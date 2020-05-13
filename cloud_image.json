@@ -1,12 +1,12 @@
 {
     "variables": {
-        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`",
+        "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
         "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
         "region": "us-west-2"
     },
     "builders": [
         {
-            "type": "amazon-ec2",
+            "type": "amazon-ebs",
             "access_key": "{{user `aws_access_key`}}",
             "secret_key": "{{user `aws_secret_key`}}",
             "region": "{{user `region`}}",
@@ -14,15 +14,17 @@
             "instance_type": "t2.micro",
             "ssh_username": "ubuntu",
             "ssh_keypair_name": "terraform-key",
-            "ssh_private_key_file": "~/.ssh/terraform-key.pem",
+            "ssh_private_key_file": "/home/vagrant/.ssh/terraform-key",
             "ami_name": "packer-practice {{timestamp}}",
-            "security_group_id": "sg-0844b18b3f3837acf",
-            "iam_instance_profile": "bucket_profile"
+            "security_group_id": "sg-084a66287b7429316",
+            "iam_instance_profile": "bucket_profile",
+            "subnet_id": "subnet-0d3df1c134f36ee23"
         }
     ],
     "provisioners": [
         {
             "type": "shell",
+            "pause_before": "15s",
             "script": "instance_setup.sh"
         }
     ]
